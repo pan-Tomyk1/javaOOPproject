@@ -16,7 +16,7 @@ public class Main {
         }while(toContinue);
     }
     private void greeting(){
-        System.out.println("BUILDING AND USING DATA STRUCTURES");
+        System.out.println("---BUILDING AND USING DATA STRUCTURES---");
         System.out.println("Please add items to the list");
     }
     private void printMethods(){
