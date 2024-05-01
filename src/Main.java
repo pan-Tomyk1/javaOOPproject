@@ -1,4 +1,3 @@
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -8,7 +7,7 @@ public class Main {
         Main main = new Main();
         main.greeting();
         main.addingElements();
-        boolean toContinue=false;
+        boolean toContinue;
         do{
             Thread.sleep(2000);
             main.printMethods();
@@ -37,13 +36,18 @@ public class Main {
         boolean checkNumber=false;
         int number=0;
         while(!checkNumber){
-            number=scanner.nextInt();
+            try{number=scanner.nextInt();}
+            catch(Exception e){
+                System.out.println("Invalid input. Please, enter a number");
+                scanner.next();
+                continue;
+            }
             checkNumber=Validation.ValidateNumber(number,max,min);
+            if(!checkNumber){
+                System.out.println("Invalid input");
+            }
         }
-        if(!checkNumber){
-            System.out.println("Invalid input");
-            scanner.next();
-        }
+
         //scanner.close();
         return number;
     }
@@ -53,38 +57,38 @@ public class Main {
             case 2 : {
                 System.out.println("Enter the index of the item " +
                         "you want to retrieve from the list" +
-                        " min - 0, max "+myList.arrayList.size());
-                int indexOfElement=enterNumber(myList.arrayList.size(),0);
-                System.out.println(myList.getElement(indexOfElement));
+                        " min - 0, max "+(myList.size()-1));
+                int indexOfElement=enterNumber(myList.size()-1,0);
+                System.out.println(myList.get(indexOfElement));
                 return true;
             }
-            case 3 : printList(myList.arrayList);return true;
+            case 3 : myList.printList();return true;
             case 4 : {
                 System.out.println("Enter the number for which you want" +
                         " to find multiples in the list");
                 int number =enterNumber(Short.MAX_VALUE,Short.MIN_VALUE);
-                printList(myList.findMultiples((short) number));
+                myList.findMultiples((short) number).printList();
                 return true;
             }
             case 5 : {
                 myList.replaceEvenPositionElementsWithZero();
                 System.out.println("Do you want to see the list");
                 if(makeChoice())
-                    printList(myList.arrayList);
+                    myList.printList();
                 return true;
             }
             case 6 :{
                 System.out.println("Enter a value relative " +
                         "to which to create a new list");
                 int number =enterNumber(Short.MAX_VALUE,Short.MIN_VALUE);
-                printList(myList.getValuesGreaterThanThreshold((short) number));
+                myList.getValuesGreaterThanThreshold((short) number).printList();
                 return true;
             }
             case 7 : {
                 myList.deleteElementsAtNonEvenPositions();
                 System.out.println("Do you want to see the list");
                 if(makeChoice())
-                    printList(myList.arrayList);
+                    myList.printList();
                 return true;
             }
             default: break;
@@ -95,7 +99,7 @@ public class Main {
         System.out.println("Please enter items, in order to finish typing please enter any letter");
         System.out.println("Maximum value - "+Short.MAX_VALUE+" minimum value - "+Short.MIN_VALUE);
         while(scanner.hasNextShort()){
-            myList.addElement(scanner.nextShort());
+            myList.add(scanner.nextShort());
         }
         scanner.next();
         System.out.println("Input stopped");
@@ -110,7 +114,5 @@ public class Main {
         //console.close();
         return choice.equals("1");
     }
-    private void printList(List list){
-        System.out.println(list);
-    }
+
 }

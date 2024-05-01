@@ -1,54 +1,121 @@
-import java.util.ArrayList;
-import java.util.List;
+public class MyList {
+    Node head;
+    private int counterOfElements;
 
-public class MyList{
-    List<Short> arrayList;
-
-    public MyList(){
-        arrayList=new ArrayList<>();
+    MyList() {
+        this.head = null;
     }
 
-    public void addElement(short element){
-        arrayList.add(element);
+    public int size() {
+        return counterOfElements;
     }
 
-    public short getElement(int index){
-        if(!Validation.ValidateNumber(index,this.arrayList.size(),0))
-            return Short.MIN_VALUE;
-        return arrayList.get(index);
+    public void add(short data) {
+        Node newNode = new Node(data);
+        if (head == null) {
+            head = newNode;
+        } else {
+            Node current = head;
+            while (current.getNextElement() != null) {
+                current = current.getNextElement();
+            }
+            current.setNextElement(newNode);
+        }
+        counterOfElements++;
     }
 
-    public List<Short> findMultiples(short number){
-        List<Short> multiples = new ArrayList<>();
-        for (short element : this.arrayList) {
-            if (element % number == (short) 0) {
+    public short get(int index) {
+        if (head == null || index < 0) {
+            throw new IllegalArgumentException("Invalid index or empty list");
+        }
+        Node current = head;
+        for (int i = 0; i < index; i++) {
+            current = current.getNextElement();
+            if (current == null) {
+                throw new IndexOutOfBoundsException("Index out of range");
+            }
+        }
+        return current.getData();
+    }
+
+    public void delete(int index) {
+        counterOfElements--;
+        if (head == null || index < 0) {
+            throw new IllegalArgumentException("Invalid index or empty list");
+        }
+        if (index == 0) {
+            head = head.getNextElement();
+            return;
+        }
+        Node prev = null;
+        Node current = head;
+        for (int i = 0; i < index; i++) {
+            prev = current;
+            current = current.getNextElement();
+            if (current == null) {
+                throw new IndexOutOfBoundsException("Index out of range");
+            }
+        }
+        prev.setNextElement(current.getNextElement());
+    }
+
+    public MyList findMultiples(short number) {
+        short element;
+        MyList multiples = new MyList();
+        for (int i = 0; i < this.size(); i++) {
+            element = this.get(i);
+            if (element % number == 0) {
                 multiples.add(element);
             }
         }
         return multiples;
     }
-    public void replaceEvenPositionElementsWithZero(){
-        for (int i = 0; i <this.arrayList.size() ; i++) {
-            if(i%2==0){
-                this.arrayList.set(i,(short)0);
+
+    public void replaceEvenPositionElementsWithZero() {
+        for (int i = 0; i < this.size(); i++) {
+            if (i % 2 != 0) {
+                this.set(i, (short) 0);
             }
         }
     }
 
-    public List<Short> getValuesGreaterThanThreshold(short number){
-        List<Short> list = new ArrayList<>();
-        for (short s:this.arrayList){
-            if(number<s){
-                list.add(s);
+    public void set(int index, short value) {
+        if (head == null || index < 0) {
+            throw new IllegalArgumentException("Invalid index or empty list");
+        }
+        Node current = head;
+        for (int i = 0; i < index; i++) {
+            current = current.getNextElement();
+            if (current == null) {
+                throw new IndexOutOfBoundsException("Index out of range");
+            }
+        }
+        current.setData((value));
+    }
+
+    public MyList getValuesGreaterThanThreshold(short number) {
+        short element;
+        MyList list = new MyList();
+        for (int i = 0; i < this.size(); i++) {
+            element = this.get(i);
+            if (element > number) {
+                list.add(element);
             }
         }
         return list;
     }
     public void deleteElementsAtNonEvenPositions(){
-        for (int i = this.arrayList.size(); i >=0; i--) {
-            if(i%2!=0){
-                this.arrayList.remove(i);
+        for (int i = this.size()-1; i >=0; i--) {
+            if(i%2==0){
+                this.delete(i);
             }
         }
+    }
+    public void printList(){
+        System.out.print("[  ");
+        for (int i = 0; i < this.size(); i++) {
+            System.out.print(this.get(i)+" ");
+        }
+        System.out.println("]");
     }
 }
